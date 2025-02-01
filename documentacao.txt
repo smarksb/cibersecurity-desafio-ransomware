@@ -1,0 +1,480 @@
+Documentação:
+Visão Geral
+Esta aplicação web permite ao usuário adicionar tarefas a uma lista, visualizar as tarefas adicionadas e removê-las quando completadas. Ela possui um layout simples e usa HTML, CSS e JavaScript para manipulação de dados.
+
+Funcionalidades
+Adicionar Tarefa: O usuário pode adicionar uma tarefa à lista.
+Remover Tarefa: Cada tarefa tem um ícone de lixeira, permitindo que o usuário a exclua.
+Interface Responsiva: A aplicação possui um layout limpo e centralizado que se adapta a diferentes tamanhos de tela.
+Estrutura de Arquivos
+index.html — O arquivo HTML que estrutura a interface da aplicação.
+style.css — O arquivo CSS que define o estilo visual da aplicação.
+script.js — O arquivo JavaScript que controla a lógica da aplicação, como adicionar e excluir tarefas.
+1. Arquivo HTML (index.html)
+Este arquivo contém a estrutura da página, com a inclusão dos arquivos CSS e JavaScript.
+
+html
+Copiar
+Editar
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="title">To-Do List</h1>
+    <div class="container">
+        <h2>Adicione sua tarefa</h2>
+        <ul id="task-list"></ul>
+        <div class="task-input">
+            <input type="text" id="task-input" placeholder="Adicionar nova tarefa...">
+            <button id="add-task">+</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+Elementos HTML:
+<h1 class="title">: Exibe o título "To-Do List".
+<ul id="task-list">: Lista onde as tarefas serão adicionadas.
+<div class="task-input">: Contém o campo de input e o botão de adicionar tarefa.
+<input id="task-input">: Campo de texto para inserir uma nova tarefa.
+<button id="add-task">: Botão para adicionar a tarefa.
+2. Arquivo CSS (style.css)
+Este arquivo define o estilo da aplicação, incluindo a aparência da lista de tarefas, botão de adicionar e o ícone de lixeira.
+
+css
+Copiar
+Editar
+body {
+    font-family: Arial, sans-serif;
+    background: #1e1e1e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.title {
+    font-size: 64px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.container {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ddd;
+    text-align: center;
+    margin-top: 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+li {
+    background: #3a3a3a;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: #bbb;
+}
+
+li.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.task-input {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.delete-btn:hover {
+    color: darkred;
+}
+Estilos Importantes:
+.container: Define a área onde as tarefas e o campo de input são exibidos.
+.delete-btn: Estilo para o ícone de lixeira (com cor vermelha).
+.task-input: Contém o campo de input e o botão de adicionar tarefa.
+3. Arquivo JavaScript (script.js)
+Este arquivo contém a lógica da aplicação, como adicionar tarefas à lista, excluir tarefas e interagir com o DOM.
+
+javascript
+Copiar
+Editar
+const addButton = document.getElementById('add-task');
+const taskInput = document.getElementById('task-input');
+const taskList = document.getElementById('task-list');
+
+// Função para adicionar tarefa
+function addTask() {
+    const taskText = taskInput.value.trim();
+
+    if (taskText !== "") {
+        const li = document.createElement('li'); // Cria um novo item da lista (li)
+        li.textContent = taskText; // Adiciona o texto da tarefa
+        
+        // Criação do botão de lixeira
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '🗑️'; // Ícone de lixeira
+        deleteButton.classList.add('delete-btn'); // Adiciona a classe de estilo
+
+        // Adiciona a tarefa e o botão de exclusão ao item da lista
+        li.appendChild(deleteButton);
+
+        // Evento para excluir a tarefa
+        deleteButton.addEventListener('click', () => {
+            taskList.removeChild(li); // Remove a tarefa da lista
+        });
+
+        // Adiciona a tarefa na lista
+        taskList.appendChild(li);
+
+        // Limpa o campo de input
+        taskInput.value = '';
+    }
+}
+
+// Adiciona a tarefa ao clicar no botão
+addButton.addEventListener('click', addTask);
+
+// Adiciona a tarefa ao pressionar Enter
+taskInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        addTask();
+    }
+});
+Funções Principais:
+addTask(): Função que cria e adiciona uma nova tarefa à lista.
+deleteButton.addEventListener(): Atribui um evento ao botão de lixeira para excluir a tarefa.
+Eventos:
+O botão de adicionar tarefa (addButton) chama addTask() ao ser clicado.
+O campo de input também permite adicionar tarefas ao pressionar a tecla Enter.
+Instruções de Uso
+Abrir a aplicação: Ao abrir a página, o usuário verá um campo de input e um botão "Adicionar".
+Adicionar Tarefas: O usuário pode digitar uma tarefa no campo de input e clicar no botão ou pressionar Enter para adicionar a tarefa.
+Excluir Tarefas: Ao lado de cada tarefa, haverá um ícone de lixeira. Ao clicar nele, a tarefa será removida da lista.
+Conclusão
+Este é um exemplo básico de uma aplicação de lista de tarefas (To-Do List) feita com HTML, CSS e JavaScript. A aplicação oferece funcionalidade de adicionar e remover tarefas de forma simples e eficiente.
+
+
+
+
+
+
+
+
+Você disse:
+gere só o texto em markdown
+O ChatGPT disse:
+ChatGPT
+Claro! Aqui está a documentação em formato markdown:
+
+markdown
+Copiar
+Editar
+# Documentação: To-Do List Web Application
+
+## Visão Geral
+Esta aplicação web permite ao usuário adicionar tarefas a uma lista, visualizar as tarefas adicionadas e removê-las quando completadas. Ela possui um layout simples e usa HTML, CSS e JavaScript para manipulação de dados.
+
+## Funcionalidades
+1. **Adicionar Tarefa**: O usuário pode adicionar uma tarefa à lista.
+2. **Remover Tarefa**: Cada tarefa tem um ícone de lixeira, permitindo que o usuário a exclua.
+3. **Interface Responsiva**: A aplicação possui um layout limpo e centralizado que se adapta a diferentes tamanhos de tela.
+
+---
+
+## Estrutura de Arquivos
+
+1. **index.html** — O arquivo HTML que estrutura a interface da aplicação.
+2. **style.css** — O arquivo CSS que define o estilo visual da aplicação.
+3. **script.js** — O arquivo JavaScript que controla a lógica da aplicação, como adicionar e excluir tarefas.
+
+---
+
+### 1. Arquivo HTML (index.html)
+
+Este arquivo contém a estrutura da página, com a inclusão dos arquivos CSS e JavaScript.
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="title">To-Do List</h1>
+    <div class="container">
+        <h2>Adicione sua tarefa</h2>
+        <ul id="task-list"></ul>
+        <div class="task-input">
+            <input type="text" id="task-input" placeholder="Adicionar nova tarefa...">
+            <button id="add-task">+</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+Elementos HTML:
+<h1 class="title">: Exibe o título "To-Do List".
+<ul id="task-list">: Lista onde as tarefas serão adicionadas.
+<div class="task-input">: Contém o campo de input e o botão de adicionar tarefa.
+<input id="task-input">: Campo de texto para inserir uma nova tarefa.
+<button id="add-task">: Botão para adicionar a tarefa.
+2. Arquivo CSS (style.css)
+Este arquivo define o estilo da aplicação, incluindo a aparência da lista de tarefas, botão de adicionar e o ícone de lixeira.
+
+css
+Copiar
+Editar
+body {
+    font-family: Arial, sans-serif;
+    background: #1e1e1e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.title {
+    font-size: 64px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.container {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ddd;
+    text-align: center;
+    margin-top: 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+li {
+    background: #3a3a3a;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: #bbb;
+}
+
+li.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.task-input {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.delete-btn:hover {
+    color: darkred;
+}
+Estilos Importantes:
+.container: Define a área onde as tarefas e o campo de input são exibidos.
+.delete-btn: Estilo para o ícone de lixeira (com cor vermelha).
+.task-input: Contém o campo de input e o botão de adicionar tarefa.
+3. Arquivo JavaScript (script.js)
+Este arquivo contém a lógica da aplicação, como adicionar tarefas à lista, excluir tarefas e interagir com o DOM.
+
+javascript
+Copiar
+Editar
+const addButton = document.getElementById('add-task');
+const taskInput = document.getElementById('task-input');
+const taskList = document.getElementById('task-list');
+
+// Função para adicionar tarefa
+function addTask() {
+    const taskText = taskInput.value.trim();
+
+    if (taskText !== "") {
+        const li = document.createElement('li'); // Cria um novo item da lista (li)
+        li.textContent = taskText; // Adiciona o texto da tarefa
+        
+        // Criação do botão de lixeira
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = '🗑️'; // Ícone de lixeira
+        deleteButton.classList.add('delete-btn'); // Adiciona a classe de estilo
+
+        // Adiciona a tarefa e o botão de exclusão ao item da lista
+        li.appendChild(deleteButton);
+
+        // Evento para excluir a tarefa
+        deleteButton.addEventListener('click', () => {
+            taskList.removeChild(li); // Remove a tarefa da lista
+        });
+
+        // Adiciona a tarefa na lista
+        taskList.appendChild(li);
+
+        // Limpa o campo de input
+        taskInput.value = '';
+    }
+}
+
+// Adiciona a tarefa ao clicar no botão
+addButton.addEventListener('click', addTask);
+
+// Adiciona a tarefa ao pressionar Enter
+taskInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        addTask();
+    }
+});
+Funções Principais:
+addTask(): Função que cria e adiciona uma nova tarefa à lista.
+deleteButton.addEventListener(): Atribui um evento ao botão de lixeira para excluir a tarefa.
+Eventos:
+O botão de adicionar tarefa (addButton) chama addTask() ao ser clicado.
+O campo de input também permite adicionar tarefas ao pressionar a tecla Enter.
+Instruções de Uso
+Abrir a aplicação: Ao abrir a página, o usuário verá um campo de input e um botão "Adicionar".
+Adicionar Tarefas: O usuário pode digitar uma tarefa no campo de input e clicar no botão ou pressionar Enter para adicionar a tarefa.
+Excluir Tarefas: Ao lado de cada tarefa, haverá um ícone de lixeira. Ao clicar nele, a tarefa será removida da lista.
+Conclusão
+Este é um exemplo básico de uma aplicação de lista de tarefas (To-Do List) feita com HTML, CSS e JavaScript. A aplicação oferece funcionalidade de adicionar e remover tarefas de forma simples e eficiente.
